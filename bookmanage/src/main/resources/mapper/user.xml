@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.bookmanage.mapper.UserMapper">
+    <resultMap id="result" type="com.example.bookmanage.entity.user">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_name" jdbcType="VARCHAR" property="user_name" />
+        <result column="id_number" jdbcType="VARCHAR" property="id_number" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+    </resultMap>
+
+    <select id="findAlluser" resultType="com.example.bookmanage.entity.user">
+        select  id,user_name,password,id_number,phone from user;
+    </select>
+
+<!--    <select id="findAdminById" resultType="com.example.employeemanage.entity.Admin">-->
+<!--        select  a.id,a.emid,a.login_name,a.password,b.name from admin a,employee b where a.emid=b.id and a.id=#{id};-->
+<!--    </select>-->
+
+    <select id="findUserByName" resultType="com.example.bookmanage.entity.user">
+        select * from user where user_name=#{user_name};
+    </select>
+
+<!--    <select id="findAdminListByloginName" resultType="com.example.employeemanage.entity.Admin">-->
+<!--        select a.emid,a.login_name,a.password,b.name from admin a,employee b where a.emid=b.id and login_name like "%"#{login_name}"%";-->
+<!--    </select>-->
+
+<!--    <insert id="insertAdmin" parameterType="com.example.employeemanage.entity.Admin" useGeneratedKeys="true">-->
+<!--        insert into admin(emid,img,login_name,password) values (#{emid},#{img},#{login_name},#{password});-->
+<!--    </insert>-->
+
+<!--    <update id="updateAdmin" parameterType="com.example.employeemanage.entity.Admin">-->
+<!--        update admin set login_name=#{login_name},password=#{password} where id=#{id};-->
+<!--    </update>-->
+
+<!--    <delete id="deleteAdminByid" parameterType="com.example.employeemanage.entity.Admin">-->
+<!--        delete from admin where id=#{id};-->
+<!--    </delete>-->
+
+</mapper>
