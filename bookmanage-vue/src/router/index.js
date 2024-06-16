@@ -1,7 +1,5 @@
 
-/* eslint-disable */
-import store from '@/store'
-import storage from '@/model/storage'
+// /* eslint-disable */
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
@@ -15,24 +13,62 @@ const routes = [
   {
     path: '/index',
     name: 'index',
+    redirect:'/reader',
     component: function () {
       return import( '../views/index')
-    }
-  }
-  // {
-  //   path: '/',
-  //   name: 'Main',
-  //   redirect: '/login',
-  //   // 某些页面规定必须登录后才能查看 ，可以在router中配置meta，将需要登录的requireAuth设为true，
-  //   meta: {
-  //     requireAuth: true,
-  //   }
-  // },
-  // {
-  //   path: '/login',
-  //   component: () => import('@/views/login'),
-  // },
-
+    },
+    children:[
+      {
+        path:'/reader',
+        name:'reader',
+        component: function () {
+          return import( '../views/reader')
+        },
+      },
+      {
+        path:'/book',
+        name:'book',
+        component: function () {
+          return import( '../views/book')
+        },
+      },
+      {
+        path:'/borrow',
+        name:'borrow',
+        component: function () {
+          return import( '../views/borrow')
+        },
+      },
+      {
+        path:'/bookType',
+        name:'bookType',
+        component: function () {
+          return import( '../views/basicInformation/bookType')
+        },
+      },
+      {
+        path:'/readerType',
+        name:'readerType',
+        component: function () {
+          return import( '../views/basicInformation/readerType')
+        },
+      },
+      {
+        path:'/user',
+        name:'user',
+        component: function () {
+          return import( '../views/user')
+        },
+      },
+      {
+        path:'/personCenter',
+        name:'personCenter',
+        component: function () {
+          return import( '../views/personCenter/index')
+        },
+      }
+    ]
+  },
 ]
 
 const router = createRouter({
@@ -40,26 +76,18 @@ const router = createRouter({
   routes
 })
 
-// 设置路由守卫，在进页面之前，判断有token，才进入页面，否则返回登录页面
-if (storage.get("token")) {
-  store.commit("setToken", storage.get("token"));
-}
-router.beforeEach((to, from, next) => {
-  // 判断要去的路由有没有requiresAuth
-  if (to.matched.some(r => r.meta.requireAuth)) {
-    if (store.state.token) {
-      next(); //有token,进行request请求，后台还会验证token
-    } else {
-      next({
-        path: "/login",
-        // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由，这要进一步在登陆页面判断
-        query: { redirect: to.fullPath }
-      });
-    }
-  } else {
-    next(); //如果无需token,那么随它去吧
-  }
-});
+
+//挂载路由导航守卫
+//to是我们跳转的路径，from是来自的路径，next为放行函数
+router.beforeEach((to,from,next)=>{
+  //如果用户访问登录页，直接放行
+  if(to.path ==="/") return next();
+  //从sessionStorage中获取到保存的token值
+  const tokenStr = window.sessionStorage.getItem("token");
+  //没有token，强制跳转到登录页面
+  if(!tokenStr) return next("/");
+  next();//有token，直接放行
+})
 
 
 export default router

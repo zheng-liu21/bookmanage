@@ -1,8 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
 import ElementPlus from 'element-plus'
+import * as Elicons from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
+const app=createApp(App)
+for (const  name in Elicons){
+    app.component(name,Elicons[name]);
+}
 
-createApp(App).use(store).use(router).use(ElementPlus).mount('#app')
+app.use(router).use(ElementPlus).mount('#app')

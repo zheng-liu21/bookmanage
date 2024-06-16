@@ -1,6 +1,14 @@
 package com.example.bookmanage.entity;
 
 public class user {
+
+
+    public static boolean isAdmin(int userId) {
+        return 5 == userId;
+    }
+    public boolean isAdmin() {
+        return isAdmin(this.id);
+    }
     public int getId() {
         return id;
     }
@@ -46,4 +54,35 @@ public class user {
     private String password;
     private String phone;
     private String id_number;
+
+    public String getTouxiag_url() {
+        return touxiag_url;
+    }
+
+    public void setTouxiag_url(String touxiag_url) {
+        this.touxiag_url = touxiag_url;
+    }
+
+    private String touxiag_url;
+
+    public Boolean getState_bool() {
+        return state_bool;
+    }
+
+    public void setState_bool(Boolean state_bool) {
+        this.state_bool = state_bool;
+    }
+
+    private Boolean state_bool;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    //    用户状态；1为正常，0不正常
+    private String state;
 }

@@ -31,11 +31,22 @@
 
 
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <el-config-provider :locale="locale">
+    <div id="app">
+      <router-view/>
+    </div>
+  </el-config-provider>
 </template>
-
+<script>
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+export default {
+  data() {
+    return {
+      locale: zhCn,
+    }
+  },
+}
+</script>
 <style>
 #app {
   width: 100vw;

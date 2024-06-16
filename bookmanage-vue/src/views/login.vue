@@ -11,7 +11,6 @@
     <div id="sysname1">阿z</div>
     <div id="sysname2">书屋</div>
     <div id="loginBox">
-<!--      <h4 style="margin-left: 40px">登录</h4>-->
       <el-form
           :model="loginForm"
           :rules="loginRules"
@@ -125,10 +124,8 @@ export default {
         password: ""
       },
       loginRules: {
-        userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
-        ],
-        passWord: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
   },
@@ -138,33 +135,22 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 验证通过 提交数据给后台 存token 路由跳转
-          // token 单纯存在sessionStorage、localStorage、cookie是可行的  若存在vuex中 刷新页面就没了
           axios_request({
             url:'/login/login',
             method:'post',
             params:this.loginForm
           }).then(res => {
-                console.log(res)
-                // 存token setItem(key,value)
-                if (res.data.code === 200) {
-                  this.$store.commit('setToken',res.data.token)
-                  // console.log(this.$store.getters.getToken())
-                  this.$router.push("/index");
-                } else {
-                  this.$notify.error({
-                    message: res.statusText,
-                  });
-                }
-              })
-              .catch((err) => {
-                this.$notify.error({
-                  title: "错误",
-                  message: "服务器内部错误",
-                });
-              });
-        } else {
-          console.log("error submit!!");
-          return false;
+            console.log(res);
+            // 存token setItem(key,value)
+            if (res.code === 200) {
+              this.$message.success("登陆成功！");
+              //保存登录后的token状态
+              window.sessionStorage.setItem("token",res.data.token);
+              this.$router.push("/index");
+            }else {
+              this.$message.error("登陆失败！"+res.message);
+            }
+          })
         }
       });
     },

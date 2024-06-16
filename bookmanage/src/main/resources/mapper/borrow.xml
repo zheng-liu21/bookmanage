@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.bookmanage.mapper.BorrowMapper">
+    <resultMap id="result" type="com.example.bookmanage.entity.borrow">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="book_id" jdbcType="INTEGER" property="book_id" />
+        <result column="book_name" jdbcType="VARCHAR" property="book_name" />
+        <result column="reader_id" jdbcType="INTEGER" property="reader_id" />
+        <result column="reader_name" jdbcType="VARCHAR" property="reader_name" />
+        <result column="borrow_date" jdbcType="DATE" property="borrow_date" />
+        <result column="return_date" jdbcType="DATE" property="return_date" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+    </resultMap>
+
+    <select id="findAllborrow" resultType="com.example.bookmanage.entity.borrow">
+        select  a.id,a.book_id,b.book_name,a.reader_id,c.reader_name,a.borrow_date,a.return_date,a.status from borrow a,book b,reader c
+        <where>
+            a.book_id=b.id and a.reader_id=c.id
+            <if test="reader_name!=null and reader_name!=''">
+                and reader_name  like concat('%', #{reader_name}, '%')
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="insertBorrow" parameterType="com.example.bookmanage.entity.borrow" useGeneratedKeys="true" keyProperty="id">
+        insert into borrow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="book_id != null">book_id,</if>
+            <if test="reader_id != null">reader_id,</if>
+            <if test="borrow_date != null">borrow_date,</if>
+            <if test="return_date != null">return_date,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="book_id != null">#{book_id},</if>
+            <if test="reader_id != null">#{reader_id},</if>
+            <if test="borrow_date != null">#{borrow_date},</if>
+            <if test="return_date != null">#{return_date},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+
+    <select id="findBorrowByreaderName" resultType="com.example.bookmanage.entity.borrow">
+        select  a.id,a.book_id,b.book_name,a.reader_id,c.reader_name,a.borrow_date,a.return_date,a.status from borrow a,book b,reader c
+        <where>
+            a.book_id=b.id and a.reader_id=c.id and c.reader_name=#{reader_name};
+        </where>
+    </select>
+
+    <select id="findBorrowById" resultType="com.example.bookmanage.entity.borrow">
+        select  a.id,a.book_id,b.book_name,a.reader_id,c.reader_name,a.borrow_date,a.return_date,a.status from borrow a,book b,reader c
+        <where>
+            a.book_id=b.id and a.reader_id=c.id and a.id=#{id};
+        </where>
+
+    </select>
+
+    <update id="updateBorrow" parameterType="com.example.bookmanage.entity.borrow">
+        update borrow
+        <set >
+            <if test="book_id != null">
+                book_id=#{book_id},
+            </if>
+            <if test="reader_id != null">
+                reader_id=#{reader_id},
+            </if>
+            <if test="borrow_date != null">
+                borrow_date=#{borrow_date},
+            </if>
+            <if test="return_date != null">
+                return_date=#{return_date},
+            </if>
+            <if test="status != null">
+                status =#{status},
+            </if>
+        </set>
+        where id=#{id};
+    </update>
+
+    <delete id="deleteBorrowrByid" parameterType="com.example.bookmanage.entity.borrow">
+        delete from borrow where id=#{id};
+    </delete>
+
+</mapper>

@@ -11,6 +11,21 @@ import java.util.List;
 public class userService {
     @Autowired(required=false)
     public UserMapper usermapper;
+
+
     public user findUserByName(String user_name){return usermapper.findUserByName(user_name);}
-    public List<user> findAlluser(){return usermapper.findAlluser();};
+    public List<user> findAlluser(user user){return usermapper.findAlluser(user);};
+    public int updateUser(user user){
+        return usermapper.updateUser(user);
+    }
+    public int insertUser(user user){
+        user.setState("1");
+        return usermapper.insertUser(user);
+    }
+    public int deleteUserByid(int id){
+        return usermapper.deleteUserByid(id);
+    }
+    public user findUserById(int id){
+        return usermapper.findUserById(id);
+    }
 }

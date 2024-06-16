@@ -7,34 +7,75 @@
         <result column="id_number" jdbcType="VARCHAR" property="id_number" />
         <result column="password" jdbcType="VARCHAR" property="password" />
         <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="state" jdbcType="VARCHAR" property="state" />
+        <result column="touxiag_url" jdbcType="VARCHAR" property="touxiag_url" />
     </resultMap>
 
     <select id="findAlluser" resultType="com.example.bookmanage.entity.user">
-        select  id,user_name,password,id_number,phone from user;
+        select  id,user_name,password,id_number,phone,state,touxiag_url from user
+        <where>
+            state ='1'
+            <if test="user_name!=null and user_name!=''">
+                and user_name  like concat('%', #{user_name}, '%')
+            </if>
+        </where>
     </select>
 
-<!--    <select id="findAdminById" resultType="com.example.employeemanage.entity.Admin">-->
-<!--        select  a.id,a.emid,a.login_name,a.password,b.name from admin a,employee b where a.emid=b.id and a.id=#{id};-->
-<!--    </select>-->
+    <select id="findUserById" resultType="com.example.bookmanage.entity.user">
+        select  * from user  where id=#{id};
+    </select>
 
     <select id="findUserByName" resultType="com.example.bookmanage.entity.user">
         select * from user where user_name=#{user_name};
     </select>
 
-<!--    <select id="findAdminListByloginName" resultType="com.example.employeemanage.entity.Admin">-->
-<!--        select a.emid,a.login_name,a.password,b.name from admin a,employee b where a.emid=b.id and login_name like "%"#{login_name}"%";-->
-<!--    </select>-->
+    <insert id="insertUser" parameterType="com.example.bookmanage.entity.user" useGeneratedKeys="true" keyProperty="id">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user_name != null">user_name,</if>
+            <if test="id_number != null">id_number,</if>
+            <if test="password != null">password,</if>
+            <if test="state != null">state,</if>
+            <if test="phone != null">phone,</if>
+            <if test="touxiag_url != null">touxiag_url,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="user_name != null">#{user_name},</if>
+            <if test="id_number != null">#{id_number},</if>
+            <if test="password != null">#{password},</if>
+            <if test="state != null">#{state},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="touxiag_url != null">#{touxiag_url},</if>
+        </trim>
+    </insert>
 
-<!--    <insert id="insertAdmin" parameterType="com.example.employeemanage.entity.Admin" useGeneratedKeys="true">-->
-<!--        insert into admin(emid,img,login_name,password) values (#{emid},#{img},#{login_name},#{password});-->
-<!--    </insert>-->
+    <update id="updateUser" parameterType="com.example.bookmanage.entity.user">
+        update user
+        <set >
+            <if test="user_name != null">
+                user_name=#{user_name},
+            </if>
+            <if test="id_number != null">
+                id_number=#{id_number},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="state != null">
+                state =#{state},
+            </if>
+            <if test="touxiag_url != null">
+                touxiag_url =#{touxiag_url},
+            </if>
+        </set>
+        where id=#{id};
+    </update>
 
-<!--    <update id="updateAdmin" parameterType="com.example.employeemanage.entity.Admin">-->
-<!--        update admin set login_name=#{login_name},password=#{password} where id=#{id};-->
-<!--    </update>-->
-
-<!--    <delete id="deleteAdminByid" parameterType="com.example.employeemanage.entity.Admin">-->
-<!--        delete from admin where id=#{id};-->
-<!--    </delete>-->
+    <delete id="deleteUserByid" parameterType="com.example.bookmanage.entity.user">
+        delete from user where id=#{id};
+    </delete>
 
 </mapper>

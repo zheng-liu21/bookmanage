@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.bookmanage.mapper.ReaderMapper">
+    <resultMap id="result" type="com.example.bookmanage.entity.reader">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="reader_name" jdbcType="VARCHAR" property="reader_name" />
+        <result column="borrow_number" jdbcType="INTEGER" property="borrow_number" />
+        <result column="reader_type" jdbcType="INTEGER" property="reader_type" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="faculties" jdbcType="VARCHAR" property="faculties" />
+        <result column="registration_date" jdbcType="DATE" property="registration_date" />
+        <result column="type_name" jdbcType="VARCHAR" property="type_name" />
+    </resultMap>
+
+    <select id="findAllreader" resultType="com.example.bookmanage.entity.reader">
+        select  a.id,a.reader_name,a.borrow_number,a.reader_type,a.sex,a.phone,a.faculties,a.registration_date,b.type_name from reader a,reader_type b
+        <where>
+            a.reader_type=b.id
+            <if test="reader_name!=null and reader_name!=''">
+                and reader_name  like concat('%', #{reader_name}, '%')
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="insertReader" parameterType="com.example.bookmanage.entity.reader" useGeneratedKeys="true" keyProperty="id">
+        insert into reader
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reader_name != null">reader_name,</if>
+            <if test="borrow_number != null">borrow_number,</if>
+            <if test="reader_type != null">reader_type,</if>
+            <if test="sex != null">sex,</if>
+            <if test="phone != null">phone,</if>
+            <if test="faculties != null">faculties,</if>
+            <if test="registration_date != null">registration_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reader_name != null">#{reader_name},</if>
+            <if test="borrow_number != null">#{borrow_number},</if>
+            <if test="reader_type != null">#{reader_type},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="faculties != null">#{faculties},</if>
+            <if test="registration_date != null">#{registration_date},</if>
+        </trim>
+    </insert>
+
+
+    <select id="findReaderByName" resultType="com.example.bookmanage.entity.reader">
+        select * from reader where reader_name=#{reader_name};
+    </select>
+
+    <select id="findReaderById" resultType="com.example.bookmanage.entity.reader">
+        select  a.id,a.reader_name,a.borrow_number,a.reader_type,a.sex,a.phone,a.faculties,a.registration_date,b.type_name from reader a,reader_type b
+        where
+            a.reader_type=b.id and a.id=#{id}
+
+    </select>
+
+    <update id="updateReader" parameterType="com.example.bookmanage.entity.reader">
+        update reader
+        <set >
+            <if test="reader_name != null">
+                reader_name=#{reader_name},
+            </if>
+            <if test="borrow_number != null">
+                borrow_number=#{borrow_number},
+            </if>
+            <if test="reader_type != null">
+                reader_type=#{reader_type},
+            </if>
+            <if test="sex != null">
+                sex=#{sex},
+            </if>
+            <if test="phone != null">
+                phone =#{phone},
+            </if>
+            <if test="faculties != null">
+                faculties =#{faculties},
+            </if>
+            <if test="registration_date != null">
+                registration_date =#{registration_date},
+            </if>
+        </set>
+        where id=#{id};
+    </update>
+
+    <delete id="deleteReaderByid" parameterType="com.example.bookmanage.entity.reader">
+        delete from reader where id=#{id};
+    </delete>
+
+</mapper>
